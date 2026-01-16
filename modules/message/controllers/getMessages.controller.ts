@@ -36,7 +36,7 @@ const getMessages: Controller = async (_body, queryParams) => {
             }
         }
 
-        // 3. Get updated messages from lastSyncAt (OPTIONAL)
+        // 3. Get updated messages
         let updated: Message[] = [];
         let deleted: Message[] = [];
         if (lastSyncAt) {
@@ -50,8 +50,7 @@ const getMessages: Controller = async (_body, queryParams) => {
             }
         }
 
-        // 4. Get users data from all the messages to fetch and 
-        //    send user data only once to the client
+        // 4. Get users data from all the messages
         const users = await messageUtils.getAllUsersFromMessages([
             ...messages,
             ...updated,

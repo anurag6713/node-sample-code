@@ -11,11 +11,32 @@ const basePath = '/message/';
 
 const routes: Routes = [
     [
-        'GET',                                       // @METHOD
-        basePath + 'get-messages',                   // @PATH
-        controllers.getMessages,                     // @CONTROLLER
-        schemas.getMessages,                         // @RESPONSE SCHEMA
-        [privateRoute(), middlewares.getMessages()], // @MIDDLEWARES
+        'GET',
+        basePath + 'delete-message',
+        controllers.deleteMessage,
+        defaultSchema,
+        [privateRoute(), middlewares.deleteMessage()],
+    ],
+    [
+        'POST',
+        basePath + 'edit-message',
+        controllers.editMessage,
+        schemas.message,
+        [privateRoute(), middlewares.editMessage()],
+    ],
+    [
+        'GET',
+        basePath + 'get-messages',
+        controllers.getMessages,
+        schemas.getMessages,
+        [privateRoute(), middlewares.getMessages()],
+    ],
+    [
+        'POST',
+        basePath + 'new-message',
+        controllers.newMessage,
+        schemas.newMessage,
+        [privateRoute(), middlewares.newMessage()],
     ],
 ];
 

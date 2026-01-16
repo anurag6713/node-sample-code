@@ -3,12 +3,17 @@ import fastJson from 'fast-json-stringify';
 import {messageBasicObject, userBasicObject} from '@utils/schemas';
 
 const schema: fastJson.ObjectSchema = {
-    title: 'Get Messages',
+    title: 'Messages',
     type: 'object',
     properties: {
         data: {
             type: 'object',
             properties: {
+                deleted: {
+                    type: 'array',
+                    items: messageBasicObject,
+                },
+                lastMessageAt: {type: 'number'},
                 messages: {
                     type: 'array',
                     items: messageBasicObject,
@@ -17,15 +22,10 @@ const schema: fastJson.ObjectSchema = {
                     type: 'array',
                     items: messageBasicObject,
                 },
-                deleted: {
-                    type: 'array',
-                    items: messageBasicObject,
-                },
                 users: {
                     type: 'array',
                     items: userBasicObject,
                 },
-                lastMessageAt: {type: 'number'},
             },
         },
         message: {type: 'string'},

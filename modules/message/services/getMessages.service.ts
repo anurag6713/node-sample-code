@@ -5,20 +5,16 @@ import {MessagesBucketCollection} from '@collections';
 import type {_ID, Channel, Message} from '@customTypes';
 import type {Projection} from 'mongodb';
 
-type GetMessagesOptions = {
+type Deps = {
     direction?: 'up' | 'down';
     channelId: _ID<Channel>;
     lastMessageId?: _ID<Message>; // Used to sync from the lastMessageId
     limit: number;
-    minimumMessageId?: _ID<Message>; // Used to get latest messages which are always newer than this id
+    minimumMessageId?: _ID<Message>; // Used to get latest messages which are always newer than this
     projection?: Projection<Message>;
 };
 
-/**
- * Since we use Bucket pattern, we need to fetch messages from multiple buckets to 
- * get the required number of messages.
- */
-async function getMessages(data: GetMessagesOptions): Promise<Message[]> {
+async function getMessages(data: Deps): Promise<Message[]> {
     const {channelId, direction = 'up', projection} = data;
     direction;
     let {lastMessageId, limit, minimumMessageId} = data;
@@ -28,7 +24,7 @@ async function getMessages(data: GetMessagesOptions): Promise<Message[]> {
 
     let messages: Message[] = [];
 
-    // Fetch atleast one bucket.
+    let doneFetching = false;
     do {
         const bucketMatch: Document = {
             channelId: new ObjectId(channelId),
@@ -126,9 +122,9 @@ async function getMessages(data: GetMessagesOptions): Promise<Message[]> {
         }
 
         if (!result.length || messages.length >= limit) {
-            break;
+            doneFetching = true;
         }
-    } while (true);
+    } while (!doneFetching);
 
     return messages;
 }
